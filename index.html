@@ -969,20 +969,22 @@ const SVG = {
   car:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M5.2 10.2l1.6-4.1A2 2 0 018.7 4.8h6.6a2 2 0 011.9 1.3l1.6 4.1A2.4 2.4 0 0121 12.5V18a1 1 0 01-1 1h-1.3a1 1 0 01-1-1v-1H6.3v1a1 1 0 01-1 1H4a1 1 0 01-1-1v-5.5a2.4 2.4 0 012.2-2.3zM7.3 9.8h9.4l-1.1-3H8.4zM6.5 15a1.4 1.4 0 100-2.8 1.4 1.4 0 000 2.8zm11 0a1.4 1.4 0 100-2.8 1.4 1.4 0 000 2.8z"/></svg>'
 };
 const SPEC = [
-  {k:"tow",  l:"Reboque / guincho", re:/reboque|guincho|socorro/},
+  {k:"tow",  l:"Reboque / guincho", re:/reboque|guincho|socorro|assistencia24|assist24|resgate/},
   {k:"bolt", l:"Elétrica", re:/eletric|bateria/},
   {k:"tire", l:"Pneus / borracharia", re:/pneu|borrach|alinhament|balancea/},
   {k:"snow", l:"Ar-condicionado", re:/arcondicionado|refrigera/},
   {k:"paint",l:"Lanternagem / pintura", re:/lanternagem|pintura|funilaria|martelinho/},
   {k:"glass",l:"Vidros", re:/vidro|parabrisa/},
   {k:"truck",l:"Diesel pesado / caminhão", re:/pesado|caminh|tacograf|implemento/},
-  {k:"wrench",l:"Mecânica", re:/mecanic|oficina|retifica|dieselleve|suspens|injecao|cambio|motor|concession/},
+  {k:"wrench",l:"Mecânica", re:/mecanic|oficina|retifica|dieselleve|suspens|injecao|cambio|motor|concession|centroautomotivo|autocenter|carcenter|solda|turbina|hidraulic|carroceria|radiador|escapamento|embreagem|freio|direcao|torno|capota|munck|autoservic|garagem/},
   {k:"gear", l:"Peças / acessórios", re:/peca|acessori|autopec|lubrific/},
   {k:"wash", l:"Lava-jato", re:/lava|esteti|higieniz/},
 ];
 function specOf(r){
   const segs = F.seg.size ? r.segs.filter(s=>F.seg.has(s)).concat(r.segs) : r.segs;
   for(const s of segs){ const n=norm(s); const hit=SPEC.find(x=>x.re.test(n)); if(hit) return hit; }
+  if(r._spn===undefined){ const nm=norm(r.fantasia+" "+r.razao); r._spn=SPEC.find(x=>x.re.test(nm))||null; }
+  if(r._spn && r.segs.every(s=>/outros|semsegmento|prestacaodeservico|distribuidora|comercioatacadista/.test(norm(s)))) return r._spn;
   return {k:"dot",l:"Outros"};
 }
 let selCod=null, selLine=null, specMarkers=new Map();
